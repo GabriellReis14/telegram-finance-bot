@@ -23,11 +23,19 @@ async function callOpenAI(prompt: string): Promise<string> {
 
 export async function detectIntent(text: string): Promise<IntentDetectionResponse> {
   const prompt = `
+    Hoje é ${getToday()}.
+
     Você é um classificador de mensagens para um bot financeiro.
 
     Analise a seguinte frase:
 
     "${text}"
+
+    Sua tarefa é identificar o tipo de mensagem e retornar um JSON com o campo "type".
+
+    O texto pode ser um ocr de um recibo, uma mensagem do usuário ou uma frase qualquer.
+
+    Se você detectar que foi de um ocr, como "comprovante de pagamento", "recibo", "nota fiscal", etc, considere que é um lançamento financeiro
 
     E retorne um JSON com um campo "type", de acordo com as regras abaixo:
 
@@ -52,6 +60,13 @@ export async function analyzeExpense(text: string): Promise<ExpenseAnalysisRespo
     Analise a seguinte frase:
 
     "${text}"
+
+    O texto pode ser um ocr de um recibo, uma mensagem do usuário ou uma frase qualquer.
+
+    Se for uma ocr de um recibo, como "comprovante de pagamento", "recibo", "nota fiscal", etc, considere que é um lançamento financeiro e 
+    coloque na categoria como Transferência ou Outros, dependendo do contexto.
+    
+    Atente-se aos detalhes e ignore erros de digitação ou formatação.
 
     Sua tarefa é identificar os seguintes campos:
 
